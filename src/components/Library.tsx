@@ -227,9 +227,9 @@ export default function Library({
                     style={{ backgroundColor: sticker.isCustom ? `${sticker.color}15` : '#ffffff', border: sticker.isCustom ? `2px solid ${sticker.color}` : '1px solid #e2e8f0' }}
                   >
                     {!sticker.isCustom && sticker.fileName ? (
-                      <img 
-                        src={`/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23')}`} 
-                        alt={sticker.name}
+                        <img 
+                          src={`/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23').replace(/\+/g, '%2B')}`} 
+                          alt={sticker.name}
                         className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
                         style={{ transform: 'translate(-50%, -50%)' }}
                       />

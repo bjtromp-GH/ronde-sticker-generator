@@ -106,7 +106,7 @@ export default function PreviewSheet({ selectedItems, layout }: PreviewSheetProp
                     {!sticker.isCustom && sticker.fileName ? (
                       <>
                         <img 
-                          src={`/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23')}`} 
+                          src={`/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23').replace(/\+/g, '%2B')}`} 
                           alt={sticker.name}
                           className="absolute top-1/2 left-1/2 max-w-none"
                           style={{ 
