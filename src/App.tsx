@@ -72,10 +72,31 @@ export default function App() {
       const lowerText = text.toLowerCase();
       const matchedStickers = allDefaultStickers.filter(sticker => {
         const nameLower = sticker.name.toLowerCase();
-        // Specifically look for the name in quotes or just as a word
-        return lowerText.includes(`'${nameLower}'`) || 
-               lowerText.includes(`"${nameLower}"`) ||
-               (nameLower.length > 3 && lowerText.includes(nameLower)); // Fallback for names > 3 chars
+        const aliases = [nameLower];
+
+        // Slimme alias generator voor prijs-stickers (bijv: "Prijs 295" -> "€2,95")
+        if (nameLower.startsWith('prijs ')) {
+          const numPart = nameLower.replace('prijs ', '').split(' ')[0]; // haalt "rood" eraf
+          if (numPart.includes('voor')) {
+            const parts = numPart.split('voor');
+            const amount = parts[0];
+            const priceRaw = parts[1].replace(',', '');
+            const p1 = priceRaw.length >= 3 ? priceRaw.slice(0, -2) + ',' + priceRaw.slice(-2) : priceRaw;
+            const p2 = priceRaw.length >= 3 ? priceRaw.slice(0, -2) + ',' + priceRaw.slice(-2) : priceRaw + ',00';
+            aliases.push(`${amount} voor €${p1}`, `${amount} voor €${p2}`, `${amount} voor ${p1}`, `${amount} voor ${p2}`);
+          } else {
+            const priceRaw = numPart.replace(',', '');
+            const p1 = priceRaw.length >= 3 ? priceRaw.slice(0, -2) + ',' + priceRaw.slice(-2) : priceRaw;
+            const p2 = priceRaw.length >= 3 ? priceRaw.slice(0, -2) + ',' + priceRaw.slice(-2) : priceRaw + ',00';
+            aliases.push(`€${p1}`, `€${p2}`, p1, p2);
+          }
+        }
+
+        return aliases.some(alias => 
+          lowerText.includes(`'${alias}'`) || 
+          lowerText.includes(`"${alias}"`) ||
+          (alias.length >= 3 && lowerText.includes(alias))
+        );
       });
 
       if (matchedStickers.length === 0) {
