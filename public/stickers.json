@@ -9,1273 +9,1289 @@
   },
   {
     "id": 2,
+    "name": "100% Spelt",
+    "fileName": "VE_Ø30mm_100%_Spelt.pdf",
+    "color": "#f59e0b",
+    "icon": "FileText",
+    "text": "100% Spelt"
+  },
+  {
+    "id": 3,
     "name": "100% Volkoren",
     "fileName": "VE_Ø30mm_100%_Volkoren.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "100% Volkoren"
   },
   {
-    "id": 3,
+    "id": 4,
     "name": "100 Gram",
     "fileName": "VE_Ø30mm_100_Gram.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "100 Gram"
   },
   {
-    "id": 4,
+    "id": 5,
     "name": "10 min 160 graden",
     "fileName": "VE_Ø30mm_10_min_160_graden.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "10 min 160 graden"
   },
   {
-    "id": 5,
+    "id": 6,
     "name": "10 min 200 graden",
     "fileName": "VE_Ø30mm_10_min_200_graden.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "10 min 200 graden"
   },
   {
-    "id": 6,
+    "id": 7,
     "name": "10 minuten 180graden",
     "fileName": "VE_Ø30mm_10_minuten_180graden.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "10 minuten 180graden"
   },
   {
-    "id": 7,
+    "id": 8,
     "name": "15 min 160 graden",
     "fileName": "VE_Ø30mm_15_min_160_graden.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "15 min 160 graden"
   },
   {
-    "id": 8,
+    "id": 9,
     "name": "15 minuten 180graden",
     "fileName": "VE_Ø30mm_15_minuten_180graden.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "15 minuten 180graden"
   },
   {
-    "id": 9,
+    "id": 10,
     "name": "160gr 25min 600W 6 min",
     "fileName": "VE_Ø30mm_160gr_25min_600W_6_min.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "160gr 25min 600W 6 min"
   },
   {
-    "id": 10,
+    "id": 11,
     "name": "180gr 30min 600W 6min",
     "fileName": "VE_Ø30mm_180gr_30min_600W_6min.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "180gr 30min 600W 6min"
   },
   {
-    "id": 11,
+    "id": 12,
     "name": "2+1 Gratis",
     "fileName": "VE_Ø30mm_2+1_Gratis.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "2+1 Gratis"
   },
   {
-    "id": 12,
+    "id": 13,
     "name": "20-25 minuten 200graden",
     "fileName": "VE_Ø30mm_20-25_minuten_200graden.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "20-25 minuten 200graden"
   },
   {
-    "id": 13,
+    "id": 14,
     "name": "200 Gram",
     "fileName": "VE_Ø30mm_200_Gram.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "200 Gram"
   },
   {
-    "id": 14,
+    "id": 15,
     "name": "20 minuten 180graden",
     "fileName": "VE_Ø30mm_20_minuten_180graden.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "20 minuten 180graden"
   },
   {
-    "id": 15,
+    "id": 16,
     "name": "20min 160 graden",
     "fileName": "VE_Ø30mm_20min_160_graden.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "20min 160 graden"
   },
   {
-    "id": 16,
+    "id": 17,
     "name": "250 Gram",
     "fileName": "VE_Ø30mm_250_Gram.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "250 Gram"
   },
   {
-    "id": 17,
+    "id": 18,
     "name": "25 minuten 150C",
     "fileName": "VE_Ø30mm_25_minuten_150C.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "25 minuten 150C"
   },
   {
-    "id": 18,
+    "id": 19,
     "name": "2e Halve Prijs",
     "fileName": "VE_Ø30mm_2e_Halve_Prijs.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "2e Halve Prijs"
   },
   {
-    "id": 19,
+    "id": 20,
     "name": "3+1 Gratis",
     "fileName": "VE_Ø30mm_3+1_Gratis.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "3+1 Gratis"
   },
   {
-    "id": 20,
+    "id": 21,
     "name": "300 Gram",
     "fileName": "VE_Ø30mm_300_Gram.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "300 Gram"
   },
   {
-    "id": 21,
+    "id": 22,
     "name": "30 min 130 graden",
     "fileName": "VE_Ø30mm_30_min_130_graden.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "30 min 130 graden"
   },
   {
-    "id": 22,
+    "id": 23,
     "name": "30 min 175 Graden",
     "fileName": "VE_Ø30mm_30_min_175_Graden.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "30 min 175 Graden"
   },
   {
-    "id": 23,
+    "id": 24,
     "name": "30min180graden",
     "fileName": "VE_Ø30mm_30min180graden.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "30min180graden"
   },
   {
-    "id": 24,
+    "id": 25,
     "name": "30min 160 graden",
     "fileName": "VE_Ø30mm_30min_160_graden.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "30min 160 graden"
   },
   {
-    "id": 25,
+    "id": 26,
     "name": "4+1 Gratis",
     "fileName": "VE_Ø30mm_4+1_Gratis.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "4+1 Gratis"
   },
   {
-    "id": 26,
+    "id": 27,
     "name": "40 min 160 graden",
     "fileName": "VE_Ø30mm_40_min_160_graden.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "40 min 160 graden"
   },
   {
-    "id": 27,
+    "id": 28,
     "name": "500 Gram",
     "fileName": "VE_Ø30mm_500_Gram.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "500 Gram"
   },
   {
-    "id": 28,
+    "id": 29,
     "name": "5 min 750W",
     "fileName": "VE_Ø30mm_5_min_750W.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "5 min 750W"
   },
   {
-    "id": 29,
+    "id": 30,
     "name": "5 minuten 600W",
     "fileName": "VE_Ø30mm_5_minuten_600W.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "5 minuten 600W"
   },
   {
-    "id": 30,
+    "id": 31,
     "name": "5 minuten roerbakken",
     "fileName": "VE_Ø30mm_5_minuten_roerbakken.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "5 minuten roerbakken"
   },
   {
-    "id": 31,
+    "id": 32,
     "name": "BBQ",
     "fileName": "VE_Ø30mm_BBQ.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "BBQ"
   },
   {
-    "id": 32,
+    "id": 33,
     "name": "Bedankt",
     "fileName": "VE_Ø30mm_Bedankt.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Bedankt"
   },
   {
-    "id": 33,
+    "id": 34,
     "name": "Belegen",
     "fileName": "VE_Ø30mm_Belegen.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Belegen"
   },
   {
-    "id": 34,
+    "id": 35,
     "name": "Belgie",
     "fileName": "VE_Ø30mm_Belgie.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Belgie"
   },
   {
-    "id": 35,
+    "id": 36,
     "name": "Beter Leven Vlees",
     "fileName": "VE_Ø30mm_Beter_Leven_Vlees.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Beter Leven Vlees"
   },
   {
-    "id": 36,
+    "id": 37,
     "name": "Beterschap",
     "fileName": "VE_Ø30mm_Beterschap.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Beterschap"
   },
   {
-    "id": 37,
+    "id": 38,
     "name": "Dagmaaltijd",
     "fileName": "VE_Ø30mm_Dagmaaltijd.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Dagmaaltijd"
   },
   {
-    "id": 38,
+    "id": 39,
     "name": "Delicatesse",
     "fileName": "VE_Ø30mm_Delicatesse.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Delicatesse"
   },
   {
-    "id": 39,
+    "id": 40,
     "name": "Denemarken",
     "fileName": "VE_Ø30mm_Denemarken.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Denemarken"
   },
   {
-    "id": 40,
+    "id": 41,
     "name": "Duitsland",
     "fileName": "VE_Ø30mm_Duitsland.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Duitsland"
   },
   {
-    "id": 41,
+    "id": 42,
     "name": "Eend",
     "fileName": "VE_Ø30mm_Eend.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Eend"
   },
   {
-    "id": 42,
+    "id": 43,
     "name": "Eet Smakelijk",
     "fileName": "VE_Ø30mm_Eet_Smakelijk.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Eet Smakelijk"
   },
   {
-    "id": 43,
+    "id": 44,
     "name": "Extra Belegen",
     "fileName": "VE_Ø30mm_Extra_Belegen.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Extra Belegen"
   },
   {
-    "id": 44,
+    "id": 45,
     "name": "Fijne Feestdagen",
     "fileName": "VE_Ø30mm_Fijne_Feestdagen.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Fijne Feestdagen"
   },
   {
-    "id": 45,
+    "id": 46,
     "name": "Fijne Moederdag",
     "fileName": "VE_Ø30mm_Fijne_Moederdag.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Fijne Moederdag"
   },
   {
-    "id": 46,
+    "id": 47,
     "name": "Fijne Pasen",
     "fileName": "VE_Ø30mm_Fijne_Pasen.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Fijne Pasen"
   },
   {
-    "id": 47,
+    "id": 48,
     "name": "Fijne Vaderdag",
     "fileName": "VE_Ø30mm_Fijne_Vaderdag.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Fijne Vaderdag"
   },
   {
-    "id": 48,
+    "id": 49,
     "name": "Frankrijk",
     "fileName": "VE_Ø30mm_Frankrijk.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Frankrijk"
   },
   {
-    "id": 49,
+    "id": 50,
     "name": "Gans",
     "fileName": "VE_Ø30mm_Gans.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Gans"
   },
   {
-    "id": 50,
+    "id": 51,
     "name": "Gefeliciteerd",
     "fileName": "VE_Ø30mm_Gefeliciteerd.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Gefeliciteerd"
   },
   {
-    "id": 51,
+    "id": 52,
     "name": "Gekruid",
     "fileName": "VE_Ø30mm_Gekruid.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Gekruid"
   },
   {
-    "id": 52,
+    "id": 53,
     "name": "Gemaakt van rauwe melk",
     "fileName": "VE_Ø30mm_Gemaakt_van_rauwe_melk.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Gemaakt van rauwe melk"
   },
   {
-    "id": 53,
+    "id": 54,
     "name": "Geniet!",
     "fileName": "VE_Ø30mm_Geniet!.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Geniet!"
   },
   {
-    "id": 54,
+    "id": 55,
     "name": "Geschikt om in te vriezen",
     "fileName": "VE_Ø30mm_Geschikt_om_in_te_vriezen.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Geschikt om in te vriezen"
   },
   {
-    "id": 55,
+    "id": 56,
     "name": "Geur Kleur Smaakstoffen",
     "fileName": "VE_Ø30mm_Geur_Kleur_Smaakstoffen.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Geur Kleur Smaakstoffen"
   },
   {
-    "id": 56,
+    "id": 57,
     "name": "Gezouten",
     "fileName": "VE_Ø30mm_Gezouten.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Gezouten"
   },
   {
-    "id": 57,
+    "id": 58,
     "name": "Glutenvrij",
     "fileName": "VE_Ø30mm_Glutenvrij.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Glutenvrij"
   },
   {
-    "id": 58,
+    "id": 59,
     "name": "Graskaas",
     "fileName": "VE_Ø30mm_Graskaas.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Graskaas"
   },
   {
-    "id": 59,
+    "id": 60,
     "name": "Griekenland",
     "fileName": "VE_Ø30mm_Griekenland.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Griekenland"
   },
   {
-    "id": 60,
+    "id": 61,
     "name": "Groot Britannie",
     "fileName": "VE_Ø30mm_Groot_Britannie.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Groot Britannie"
   },
   {
-    "id": 61,
+    "id": 62,
     "name": "Haas",
     "fileName": "VE_Ø30mm_Haas.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Haas"
   },
   {
-    "id": 62,
+    "id": 63,
     "name": "Halal",
     "fileName": "VE_Ø30mm_Halal.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Halal"
   },
   {
-    "id": 63,
+    "id": 64,
     "name": "Half om Half",
     "fileName": "VE_Ø30mm_Half_om_Half.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Half om Half"
   },
   {
-    "id": 64,
+    "id": 65,
     "name": "Hert",
     "fileName": "VE_Ø30mm_Hert.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Hert"
   },
   {
-    "id": 65,
+    "id": 66,
     "name": "Hoera",
     "fileName": "VE_Ø30mm_Hoera.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Hoera"
   },
   {
-    "id": 66,
+    "id": 67,
     "name": "Huisgemaakt",
     "fileName": "VE_Ø30mm_Huisgemaakt.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Huisgemaakt"
   },
   {
-    "id": 67,
+    "id": 68,
     "name": "Italie",
     "fileName": "VE_Ø30mm_Italie.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Italie"
   },
   {
-    "id": 68,
+    "id": 69,
     "name": "Jong",
     "fileName": "VE_Ø30mm_Jong.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Jong"
   },
   {
-    "id": 69,
+    "id": 70,
     "name": "Jong Belegen",
     "fileName": "VE_Ø30mm_Jong_Belegen.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Jong Belegen"
   },
   {
-    "id": 70,
+    "id": 71,
     "name": "KIP luxe",
     "fileName": "VE_Ø30mm_KIP_luxe.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "KIP luxe"
   },
   {
-    "id": 71,
+    "id": 72,
     "name": "Kaas van de Week",
     "fileName": "VE_Ø30mm_Kaas_van_de_Week.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Kaas van de Week"
   },
   {
-    "id": 72,
+    "id": 73,
     "name": "Kalf",
     "fileName": "VE_Ø30mm_Kalf.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Kalf"
   },
   {
-    "id": 73,
+    "id": 74,
     "name": "Keurslager Exclusive witgoud",
     "fileName": "VE_Ø30mm_Keurslager_Exclusive_witgoud.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Keurslager Exclusive witgoud"
   },
   {
-    "id": 74,
+    "id": 75,
     "name": "Keurslager Exclusive zwartgoud",
     "fileName": "VE_Ø30mm_Keurslager_Exclusive_zwartgoud.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Keurslager Exclusive zwartgoud"
   },
   {
-    "id": 75,
+    "id": 76,
     "name": "Kip",
     "fileName": "VE_Ø30mm_Kip.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Kip"
   },
   {
-    "id": 76,
+    "id": 77,
     "name": "Kleine Maaltijd",
     "fileName": "VE_Ø30mm_Kleine_Maaltijd.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Kleine Maaltijd"
   },
   {
-    "id": 77,
+    "id": 78,
     "name": "Kruiden",
     "fileName": "VE_Ø30mm_Kruiden.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Kruiden"
   },
   {
-    "id": 78,
+    "id": 79,
     "name": "Lactosevrij",
     "fileName": "VE_Ø30mm_Lactosevrij.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Lactosevrij"
   },
   {
-    "id": 79,
+    "id": 80,
     "name": "Lam",
     "fileName": "VE_Ø30mm_Lam.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Lam"
   },
   {
-    "id": 80,
+    "id": 81,
     "name": "MELK",
     "fileName": "VE_Ø30mm_MELK.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "MELK"
   },
   {
-    "id": 81,
+    "id": 82,
     "name": "Maaltijd vd Dag groen",
     "fileName": "VE_Ø30mm_Maaltijd_vd_Dag_groen.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Maaltijd vd Dag groen"
   },
   {
-    "id": 82,
+    "id": 83,
     "name": "Maaltijd vd Dag zwart",
     "fileName": "VE_Ø30mm_Maaltijd_vd_Dag_zwart.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Maaltijd vd Dag zwart"
   },
   {
-    "id": 83,
+    "id": 84,
     "name": "Met Goud Bekroond",
     "fileName": "VE_Ø30mm_Met_Goud_Bekroond.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Met Goud Bekroond"
   },
   {
-    "id": 84,
+    "id": 85,
     "name": "Met Liefde Gemaakt",
     "fileName": "VE_Ø30mm_Met_Liefde_Gemaakt.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Met Liefde Gemaakt"
   },
   {
-    "id": 85,
+    "id": 86,
     "name": "Mix&Match",
     "fileName": "VE_Ø30mm_Mix&Match.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Mix&Match"
   },
   {
-    "id": 86,
+    "id": 87,
     "name": "NIEUW luxe",
     "fileName": "VE_Ø30mm_NIEUW_luxe.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "NIEUW luxe"
   },
   {
-    "id": 87,
+    "id": 88,
     "name": "Nederland",
     "fileName": "VE_Ø30mm_Nederland.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Nederland"
   },
   {
-    "id": 88,
+    "id": 89,
     "name": "Nieuw",
     "fileName": "VE_Ø30mm_Nieuw.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Nieuw"
   },
   {
-    "id": 89,
+    "id": 90,
     "name": "Nieuw Zwart",
     "fileName": "VE_Ø30mm_Nieuw_Zwart.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Nieuw Zwart"
   },
   {
-    "id": 90,
+    "id": 91,
     "name": "Nootje van de Week",
     "fileName": "VE_Ø30mm_Nootje_van_de_Week.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Nootje van de Week"
   },
   {
-    "id": 91,
+    "id": 92,
     "name": "Ongezouten",
     "fileName": "VE_Ø30mm_Ongezouten.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Ongezouten"
   },
   {
-    "id": 92,
+    "id": 93,
     "name": "Oranje Special",
     "fileName": "VE_Ø30mm_Oranje_Special.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Oranje Special"
   },
   {
-    "id": 93,
+    "id": 94,
     "name": "Oud",
     "fileName": "VE_Ø30mm_Oud.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Oud"
   },
   {
-    "id": 94,
+    "id": 95,
     "name": "Oud Snijbaar",
     "fileName": "VE_Ø30mm_Oud_Snijbaar.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Oud Snijbaar"
   },
   {
-    "id": 95,
+    "id": 96,
     "name": "Overjarig",
     "fileName": "VE_Ø30mm_Overjarig.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Overjarig"
   },
   {
-    "id": 96,
+    "id": 97,
     "name": "PUUR",
     "fileName": "VE_Ø30mm_PUUR.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "PUUR"
   },
   {
-    "id": 97,
+    "id": 98,
     "name": "Personeel Gezocht",
     "fileName": "VE_Ø30mm_Personeel_Gezocht.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Personeel Gezocht"
   },
   {
-    "id": 98,
+    "id": 99,
     "name": "Pittig",
     "fileName": "VE_Ø30mm_Pittig.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Pittig"
   },
   {
-    "id": 99,
+    "id": 100,
     "name": "Prijs 1495",
     "fileName": "VE_Ø30mm_Prijs_1495.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Prijs 1495"
   },
   {
-    "id": 100,
+    "id": 101,
     "name": "Prijs 1995",
     "fileName": "VE_Ø30mm_Prijs_1995.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Prijs 1995"
   },
   {
-    "id": 101,
+    "id": 102,
     "name": "Prijs 250",
     "fileName": "VE_Ø30mm_Prijs_250.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Prijs 250"
   },
   {
-    "id": 102,
+    "id": 103,
     "name": "Prijs 295",
     "fileName": "VE_Ø30mm_Prijs_295.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Prijs 295"
   },
   {
-    "id": 103,
+    "id": 104,
     "name": "Prijs 299",
     "fileName": "VE_Ø30mm_Prijs_299.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Prijs 299"
   },
   {
-    "id": 104,
+    "id": 105,
     "name": "Prijs 2voor1250",
     "fileName": "VE_Ø30mm_Prijs_2voor1250.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Prijs 2voor1250"
   },
   {
-    "id": 105,
+    "id": 106,
     "name": "Prijs 2voor15",
     "fileName": "VE_Ø30mm_Prijs_2voor15.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Prijs 2voor15"
   },
   {
-    "id": 106,
+    "id": 107,
     "name": "Prijs 2voor5",
     "fileName": "VE_Ø30mm_Prijs_2voor5.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Prijs 2voor5"
   },
   {
-    "id": 107,
+    "id": 108,
     "name": "Prijs 2voor995",
     "fileName": "VE_Ø30mm_Prijs_2voor995.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Prijs 2voor995"
   },
   {
-    "id": 108,
+    "id": 109,
     "name": "Prijs 350",
     "fileName": "VE_Ø30mm_Prijs_350.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Prijs 350"
   },
   {
-    "id": 109,
+    "id": 110,
     "name": "Prijs 395",
     "fileName": "VE_Ø30mm_Prijs_395.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Prijs 395"
   },
   {
-    "id": 110,
+    "id": 111,
     "name": "Prijs 3voor1195",
     "fileName": "VE_Ø30mm_Prijs_3voor1195.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Prijs 3voor1195"
   },
   {
-    "id": 111,
+    "id": 112,
     "name": "Prijs 3voor15 2",
     "fileName": "VE_Ø30mm_Prijs_3voor15 2.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Prijs 3voor15 2"
   },
   {
-    "id": 112,
+    "id": 113,
     "name": "Prijs 3voor15",
     "fileName": "VE_Ø30mm_Prijs_3voor15.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Prijs 3voor15"
   },
   {
-    "id": 113,
+    "id": 114,
     "name": "Prijs 3voor595",
     "fileName": "VE_Ø30mm_Prijs_3voor595.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Prijs 3voor595"
   },
   {
-    "id": 114,
+    "id": 115,
     "name": "Prijs 3voor5 rood",
     "fileName": "VE_Ø30mm_Prijs_3voor5_rood.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Prijs 3voor5 rood"
   },
   {
-    "id": 115,
+    "id": 116,
     "name": "Prijs 3voor5 roze",
     "fileName": "VE_Ø30mm_Prijs_3voor5_roze.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Prijs 3voor5 roze"
   },
   {
-    "id": 116,
+    "id": 117,
     "name": "Prijs 3voor6,95",
     "fileName": "VE_Ø30mm_Prijs_3voor6,95.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Prijs 3voor6,95"
   },
   {
-    "id": 117,
+    "id": 118,
     "name": "Prijs 3voor675",
     "fileName": "VE_Ø30mm_Prijs_3voor675.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Prijs 3voor675"
   },
   {
-    "id": 118,
+    "id": 119,
     "name": "Prijs 3voor695",
     "fileName": "VE_Ø30mm_Prijs_3voor695.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Prijs 3voor695"
   },
   {
-    "id": 119,
+    "id": 120,
     "name": "Prijs 3voor6 oranje",
     "fileName": "VE_Ø30mm_Prijs_3voor6_oranje.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Prijs 3voor6 oranje"
   },
   {
-    "id": 120,
+    "id": 121,
     "name": "Prijs 3voor895",
     "fileName": "VE_Ø30mm_Prijs_3voor895.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Prijs 3voor895"
   },
   {
-    "id": 121,
+    "id": 122,
     "name": "Prijs 3voor995",
     "fileName": "VE_Ø30mm_Prijs_3voor995.pdf",
-    "color": "#10b981",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Prijs 3voor995"
   },
   {
-    "id": 122,
+    "id": 123,
     "name": "Prijs 495",
     "fileName": "VE_Ø30mm_Prijs_495.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Prijs 495"
   },
   {
-    "id": 123,
+    "id": 124,
     "name": "Prijs 499",
     "fileName": "VE_Ø30mm_Prijs_499.pdf",
-    "color": "#3b82f6",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Prijs 499"
   },
   {
-    "id": 124,
+    "id": 125,
     "name": "Prijs 595",
     "fileName": "VE_Ø30mm_Prijs_595.pdf",
-    "color": "#ec4899",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Prijs 595"
   },
   {
-    "id": 125,
+    "id": 126,
     "name": "Prijs 599",
     "fileName": "VE_Ø30mm_Prijs_599.pdf",
-    "color": "#84cc16",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Prijs 599"
   },
   {
-    "id": 126,
+    "id": 127,
     "name": "Prijs 695",
     "fileName": "VE_Ø30mm_Prijs_695.pdf",
-    "color": "#6366f1",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Prijs 695"
   },
   {
-    "id": 127,
+    "id": 128,
     "name": "Prijs 750",
     "fileName": "VE_Ø30mm_Prijs_750.pdf",
-    "color": "#14b8a6",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Prijs 750"
   },
   {
-    "id": 128,
+    "id": 129,
     "name": "Prijs 795",
     "fileName": "VE_Ø30mm_Prijs_795.pdf",
-    "color": "#f43f5e",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Prijs 795"
   },
   {
-    "id": 129,
+    "id": 130,
+    "name": "Prijs 845",
+    "fileName": "VE_Ø30mm_Prijs_845.pdf",
+    "color": "#f59e0b",
+    "icon": "FileText",
+    "text": "Prijs 845"
+  },
+  {
+    "id": 131,
     "name": "Prijs 850",
     "fileName": "VE_Ø30mm_Prijs_850.pdf",
-    "color": "#10b981",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Prijs 850"
   },
   {
-    "id": 130,
+    "id": 132,
     "name": "Prijs 895",
     "fileName": "VE_Ø30mm_Prijs_895.pdf",
-    "color": "#f59e0b",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Prijs 895"
   },
   {
-    "id": 131,
+    "id": 133,
     "name": "Prijs 995",
     "fileName": "VE_Ø30mm_Prijs_995.pdf",
-    "color": "#3b82f6",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Prijs 995"
   },
   {
-    "id": 132,
+    "id": 134,
     "name": "Reclame geel",
     "fileName": "VE_Ø30mm_Reclame_geel.pdf",
-    "color": "#ec4899",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Reclame geel"
   },
   {
-    "id": 133,
+    "id": 135,
     "name": "Reclame rood",
     "fileName": "VE_Ø30mm_Reclame_rood.pdf",
-    "color": "#84cc16",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Reclame rood"
   },
   {
-    "id": 134,
+    "id": 136,
     "name": "Reclame zwart",
     "fileName": "VE_Ø30mm_Reclame_zwart.pdf",
-    "color": "#6366f1",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Reclame zwart"
   },
   {
-    "id": 135,
+    "id": 137,
     "name": "Rund",
     "fileName": "VE_Ø30mm_Rund.pdf",
-    "color": "#14b8a6",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Rund"
   },
   {
-    "id": 136,
+    "id": 138,
     "name": "Sinterklaas",
     "fileName": "VE_Ø30mm_Sinterklaas.pdf",
-    "color": "#f43f5e",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Sinterklaas"
   },
   {
-    "id": 137,
+    "id": 139,
     "name": "Spanje",
     "fileName": "VE_Ø30mm_Spanje.pdf",
-    "color": "#10b981",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Spanje"
   },
   {
-    "id": 138,
+    "id": 140,
     "name": "Specialiteit Groen",
     "fileName": "VE_Ø30mm_Specialiteit_Groen.pdf",
-    "color": "#f59e0b",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Specialiteit Groen"
   },
   {
-    "id": 139,
+    "id": 141,
     "name": "Specialiteit Zwart",
     "fileName": "VE_Ø30mm_Specialiteit_Zwart.pdf",
-    "color": "#3b82f6",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Specialiteit Zwart"
   },
   {
-    "id": 140,
+    "id": 142,
     "name": "Streekproduct",
     "fileName": "VE_Ø30mm_Streekproduct.pdf",
-    "color": "#ec4899",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Streekproduct"
   },
   {
-    "id": 141,
+    "id": 143,
     "name": "Suikervrij",
     "fileName": "VE_Ø30mm_Suikervrij.pdf",
-    "color": "#84cc16",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Suikervrij"
   },
   {
-    "id": 142,
+    "id": 144,
     "name": "Suikervrij lichtblauw",
     "fileName": "VE_Ø30mm_Suikervrij_lichtblauw.pdf",
-    "color": "#6366f1",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Suikervrij lichtblauw"
   },
   {
-    "id": 143,
+    "id": 145,
     "name": "Tip van de Slager",
     "fileName": "VE_Ø30mm_Tip_van_de_Slager.pdf",
-    "color": "#14b8a6",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Tip van de Slager"
   },
   {
-    "id": 144,
+    "id": 146,
     "name": "Tip van de Slager luxe",
     "fileName": "VE_Ø30mm_Tip_van_de_Slager_luxe.pdf",
-    "color": "#f43f5e",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Tip van de Slager luxe"
   },
   {
-    "id": 145,
+    "id": 147,
     "name": "Uit Eigen Keuken groen",
     "fileName": "VE_Ø30mm_Uit_Eigen_Keuken_groen.pdf",
-    "color": "#10b981",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Uit Eigen Keuken groen"
   },
   {
-    "id": 146,
+    "id": 148,
     "name": "Uit Eigen Keuken zwart",
     "fileName": "VE_Ø30mm_Uit_Eigen_Keuken_zwart.pdf",
-    "color": "#f59e0b",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Uit Eigen Keuken zwart"
   },
   {
-    "id": 147,
+    "id": 149,
     "name": "VEGA",
     "fileName": "VE_Ø30mm_VEGA.pdf",
-    "color": "#3b82f6",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "VEGA"
   },
   {
-    "id": 148,
+    "id": 150,
     "name": "Varken",
     "fileName": "VE_Ø30mm_Varken.pdf",
-    "color": "#ec4899",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Varken"
   },
   {
-    "id": 149,
+    "id": 151,
     "name": "Vegan",
     "fileName": "VE_Ø30mm_Vegan.pdf",
-    "color": "#84cc16",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Vegan"
   },
   {
-    "id": 150,
+    "id": 152,
     "name": "Vers Gebrande Noten",
     "fileName": "VE_Ø30mm_Vers_Gebrande_Noten.pdf",
-    "color": "#6366f1",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "Vers Gebrande Noten"
   },
   {
-    "id": 151,
+    "id": 153,
     "name": "Verwarmen kern 76graden",
     "fileName": "VE_Ø30mm_Verwarmen_kern_76graden.pdf",
-    "color": "#14b8a6",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Verwarmen kern 76graden"
   },
   {
-    "id": 152,
+    "id": 154,
     "name": "Vis",
     "fileName": "VE_Ø30mm_Vis.pdf",
-    "color": "#f43f5e",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Vis"
   },
   {
-    "id": 153,
+    "id": 155,
     "name": "Week Actie",
     "fileName": "VE_Ø30mm_Week_Actie.pdf",
-    "color": "#10b981",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Week Actie"
   },
   {
-    "id": 154,
+    "id": 156,
     "name": "Weekend Tip",
     "fileName": "VE_Ø30mm_Weekend_Tip.pdf",
-    "color": "#f59e0b",
+    "color": "#ec4899",
     "icon": "FileText",
     "text": "Weekend Tip"
   },
   {
-    "id": 155,
+    "id": 157,
     "name": "Weggooien is Zonde 35%",
     "fileName": "VE_Ø30mm_Weggooien_is_Zonde_35%.pdf",
-    "color": "#3b82f6",
+    "color": "#84cc16",
     "icon": "FileText",
     "text": "Weggooien is Zonde 35%"
   },
   {
-    "id": 156,
+    "id": 158,
     "name": "Weggooien is Zonde v1",
     "fileName": "VE_Ø30mm_Weggooien_is_Zonde_v1.pdf",
-    "color": "#ec4899",
+    "color": "#6366f1",
     "icon": "FileText",
     "text": "Weggooien is Zonde v1"
   },
   {
-    "id": 157,
+    "id": 159,
     "name": "Weggooien is Zonde v2",
     "fileName": "VE_Ø30mm_Weggooien_is_Zonde_v2.pdf",
-    "color": "#84cc16",
+    "color": "#14b8a6",
     "icon": "FileText",
     "text": "Weggooien is Zonde v2"
   },
   {
-    "id": 158,
+    "id": 160,
     "name": "XL",
     "fileName": "VE_Ø30mm_XL.pdf",
-    "color": "#6366f1",
+    "color": "#f43f5e",
     "icon": "FileText",
     "text": "XL"
   },
   {
-    "id": 159,
+    "id": 161,
     "name": "Yes zezijnerweer",
     "fileName": "VE_Ø30mm_Yes_zezijnerweer.pdf",
-    "color": "#14b8a6",
+    "color": "#10b981",
     "icon": "FileText",
     "text": "Yes zezijnerweer"
   },
   {
-    "id": 160,
+    "id": 162,
     "name": "Zwitserland",
     "fileName": "VE_Ø30mm_Zwitserland.pdf",
-    "color": "#f43f5e",
+    "color": "#f59e0b",
     "icon": "FileText",
     "text": "Zwitserland"
   }
