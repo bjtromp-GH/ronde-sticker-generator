@@ -18,10 +18,11 @@ export default defineConfig(() => {
             }
 
             try {
-              let body = '';
+              const chunks: Buffer[] = [];
               for await (const chunk of req) {
-                body += chunk;
+                chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
               }
+              const body = Buffer.concat(chunks).toString('utf8');
 
               const { files } = JSON.parse(body);
               if (!Array.isArray(files) || files.length === 0) {
@@ -42,7 +43,11 @@ export default defineConfig(() => {
                   safeName += '.pdf';
                 }
                 const destPath = path.join(pdfsDir, safeName);
-                const buffer = Buffer.from(file.dataBase64, 'base64');
+                const rawBase64 = (file.dataBase64 || '').replace(/^data:.*?;base64,/, '');
+                const buffer = Buffer.from(rawBase64, 'base64');
+                if (buffer.length === 0) {
+                  throw new Error(`Bestand ${safeName} bevat geen geldige PDF-inhoud (0 bytes)`);
+                }
                 fs.writeFileSync(destPath, buffer);
                 savedFiles.push(safeName);
               }

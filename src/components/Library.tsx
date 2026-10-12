@@ -35,6 +35,7 @@ export default function Library({
   const [customText, setCustomText] = useState<string>('');
   const [customColor, setCustomColor] = useState<string>('#6366f1');
   const [uploadedBytes, setUploadedBytes] = useState<Uint8Array | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string>('');
   const [uploadedThumbnail, setUploadedThumbnail] = useState<string>('');
 
@@ -63,7 +64,21 @@ export default function Library({
     loadDefaultStickers();
   }, []);
 
-  // Helper to convert Uint8Array to base64
+  // Helper to reliably convert a File to base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const res = reader.result as string;
+        const base64 = res.split(',')[1] || '';
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Fallback helper to convert Uint8Array to base64
   const uint8ToBase64 = (bytes: Uint8Array): string => {
     let binary = '';
     const len = bytes.byteLength;
@@ -123,6 +138,7 @@ export default function Library({
         const cleanedName = cleanStickerName(file.name);
 
         setUploadedBytes(bytes);
+        setUploadedFile(file);
         setUploadedFileName(file.name);
         setCustomName(cleanedName);
         setCustomText('');
@@ -156,21 +172,28 @@ export default function Library({
         const bytes = new Uint8Array(arrayBuffer);
         const thumb = await generatePdfThumbnail(bytes);
         const name = cleanStickerName(file.name);
+        const safeBase = name
+          .replace(/[/\\?%*:|"<>]/g, '')
+          .trim()
+          .replace(/\s+/g, '_');
+        const targetFileName = `VE_Ø30mm_${safeBase}.pdf`;
+
+        const base64Data = await fileToBase64(file);
 
         serverPayload.push({
-          name: file.name,
-          dataBase64: uint8ToBase64(bytes),
+          name: targetFileName,
+          dataBase64: base64Data,
         });
 
         newStickers.push({
           id: `custom_${Date.now()}_${i}`,
           name,
-          fileName: file.name,
+          fileName: targetFileName,
           color: colors[i % colors.length],
           icon: 'FileText',
           text: name,
           isCustom: true,
-          pdfBytes: bytes,
+          pdfBytes: bytes.slice(0),
           thumbnailUrl: thumb,
         });
       } catch (err) {
@@ -199,28 +222,50 @@ export default function Library({
     e.preventDefault();
     if (!uploadedBytes || !customName.trim()) return;
 
-    // Check if localhost dev server can save it to public/PDFs
+    const cleanName = customName.trim();
+    const safeBase = cleanName
+      .replace(/[/\\?%*:|"<>]/g, '')
+      .trim()
+      .replace(/\s+/g, '_');
+    const targetFileName = `VE_Ø30mm_${safeBase}.pdf`;
+
+    let base64Data = '';
+    if (uploadedFile) {
+      try {
+        base64Data = await fileToBase64(uploadedFile);
+      } catch (err) {
+        console.error('Fout bij converteren naar base64:', err);
+      }
+    }
+    if (!base64Data) {
+      base64Data = uint8ToBase64(uploadedBytes);
+    }
+
     const serverPayload = [
       {
-        name: uploadedFileName,
-        dataBase64: uint8ToBase64(uploadedBytes),
+        name: targetFileName,
+        dataBase64: base64Data,
       },
     ];
+
     const savedToServer = await trySaveToServer(serverPayload);
 
-    if (!savedToServer) {
-      const newSticker: Sticker = {
-        id: `custom_${Date.now()}`,
-        name: customName.trim(),
-        fileName: uploadedFileName,
-        color: customColor,
-        icon: 'FileText',
-        text: customText.trim() || customName.trim(),
-        isCustom: true,
-        pdfBytes: uploadedBytes,
-        thumbnailUrl: uploadedThumbnail,
-      };
-      onAddCustomSticker(newSticker);
+    const createdSticker: Sticker = {
+      id: `custom_${Date.now()}`,
+      name: cleanName,
+      fileName: targetFileName,
+      color: customColor,
+      icon: 'FileText',
+      text: customText.trim() || cleanName,
+      isCustom: !savedToServer,
+      pdfBytes: uploadedBytes.slice(0),
+      thumbnailUrl: uploadedThumbnail,
+    };
+
+    if (savedToServer) {
+      onAddSticker(createdSticker);
+    } else {
+      onAddCustomSticker(createdSticker);
     }
 
     // Reset state & close modal
@@ -228,6 +273,7 @@ export default function Library({
     setCustomText('');
     setCustomColor('#6366f1');
     setUploadedBytes(null);
+    setUploadedFile(null);
     setUploadedFileName('');
     setUploadedThumbnail('');
     setShowUploadModal(false);
