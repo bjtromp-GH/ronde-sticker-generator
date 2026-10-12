@@ -7,6 +7,7 @@ export interface Sticker {
   text?: string;
   isCustom?: boolean;
   pdfBytes?: Uint8Array; // ArrayBuffer containing the custom uploaded PDF
+  thumbnailUrl?: string; // Preview image data URL or URL
 }
 
 export interface SelectedItem {

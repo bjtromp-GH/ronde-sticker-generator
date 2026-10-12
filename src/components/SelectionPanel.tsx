@@ -149,9 +149,9 @@ export default function SelectionPanel({
                     className="w-8 h-8 rounded-full border shrink-0 flex items-center justify-center overflow-hidden relative"
                     style={{ borderColor: sticker.isCustom ? sticker.color : '#e2e8f0', backgroundColor: sticker.isCustom ? `${sticker.color}10` : '#ffffff' }}
                   >
-                    {!sticker.isCustom && sticker.fileName ? (
+                    {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
                       <img 
-                        src={`/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23')}`} 
+                        src={sticker.thumbnailUrl || `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23')}`} 
                         alt={sticker.name}
                         className="w-[120%] h-[120%] max-w-none object-cover"
                       />

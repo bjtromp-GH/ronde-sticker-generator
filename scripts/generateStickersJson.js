@@ -9,14 +9,15 @@ const pdfsDir = path.join(__dirname, '..', 'public', 'PDFs');
 const thumbnailsDir = path.join(__dirname, '..', 'public', 'thumbnails');
 const outputJson = path.join(__dirname, '..', 'public', 'stickers.json');
 
-if (!fs.existsSync(thumbnailsDir)) {
-    fs.mkdirSync(thumbnailsDir, { recursive: true });
-}
-
-const files = fs.readdirSync(pdfsDir).filter(f => f.endsWith('.pdf'));
 const colors = ['#10b981', '#f59e0b', '#3b82f6', '#ec4899', '#84cc16', '#6366f1', '#14b8a6', '#f43f5e'];
 
-async function generateThumbnails() {
+export async function generateThumbnails() {
+    if (!fs.existsSync(thumbnailsDir)) {
+        fs.mkdirSync(thumbnailsDir, { recursive: true });
+    }
+
+    const files = fs.readdirSync(pdfsDir).filter(f => f.endsWith('.pdf'));
+
     let pdfjsLib = null;
     let createCanvas = null;
     try {
@@ -59,7 +60,16 @@ async function generateThumbnails() {
     }
 }
 
-async function main() {
+export async function generateStickersAndThumbnails() {
+    if (!fs.existsSync(pdfsDir)) {
+        fs.mkdirSync(pdfsDir, { recursive: true });
+    }
+    if (!fs.existsSync(thumbnailsDir)) {
+        fs.mkdirSync(thumbnailsDir, { recursive: true });
+    }
+
+    const files = fs.readdirSync(pdfsDir).filter(f => f.endsWith('.pdf'));
+
     const stickers = files.map((file, index) => {
         let name = file.replace(/\.pdf$/i, '')
                        .replace(/^VE_Ø30mm_/, '')
@@ -68,7 +78,7 @@ async function main() {
         return {
             id: index + 1,
             name: name,
-            fileName: file, // Keep just the filename, we'll fetch from /PDFs/ in the frontend
+            fileName: file,
             color: colors[index % colors.length],
             icon: "FileText",
             text: name
@@ -80,9 +90,14 @@ async function main() {
 
     await generateThumbnails();
     console.log('Thumbnail check complete.');
+
+    return stickers;
 }
 
-main().catch(err => {
-    console.error('Fatal error in generateStickersJson:', err);
-    process.exit(1);
-});
+// If executed directly from command line
+if (process.argv[1] && process.argv[1].endsWith('generateStickersJson.js')) {
+    generateStickersAndThumbnails().catch(err => {
+        console.error('Fatal error in generateStickersJson:', err);
+        process.exit(1);
+    });
+}

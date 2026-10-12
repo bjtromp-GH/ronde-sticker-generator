@@ -1,40 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
 import { Sticker } from '../types';
+import { generatePdfThumbnail, cleanStickerName } from '../utils/pdfThumbnail';
 
 interface LibraryProps {
   onAddSticker: (sticker: Sticker) => void;
   customStickers: Sticker[];
   onAddCustomSticker: (sticker: Sticker) => void;
+  onAddMultipleCustomStickers?: (stickers: Sticker[]) => void;
+  onDeleteCustomSticker?: (id: string | number) => void;
 }
 
 export default function Library({
   onAddSticker,
   customStickers,
   onAddCustomSticker,
+  onAddMultipleCustomStickers,
+  onDeleteCustomSticker,
 }: LibraryProps) {
   const [defaultStickers, setDefaultStickers] = useState<Sticker[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'all' | 'default' | 'custom'>('all');
 
-  // Custom sticker modal / state
+  // Drag and drop state
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [processingStatus, setProcessingStatus] = useState<string>('');
+
+  // Single upload modal state
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
   const [customName, setCustomName] = useState<string>('');
   const [customText, setCustomText] = useState<string>('');
   const [customColor, setCustomColor] = useState<string>('#6366f1');
   const [uploadedBytes, setUploadedBytes] = useState<Uint8Array | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string>('');
+  const [uploadedThumbnail, setUploadedThumbnail] = useState<string>('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch default stickers from stickers.json
-  useEffect(() => {
+  // Load stickers from stickers.json
+  const loadDefaultStickers = () => {
+    setIsLoading(true);
     fetch('/stickers.json')
       .then((res) => {
-        if (!res.ok) {
-          throw new Error('Kon stickers.json niet laden');
-        }
+        if (!res.ok) throw new Error('Kon stickers.json niet laden');
         return res.json();
       })
       .then((data) => {
@@ -43,122 +54,203 @@ export default function Library({
       })
       .catch((err) => {
         console.error(err);
-        setError('Kon standaard stickerbibliotheek niet inladen. Gebruikt fallback-stickers.');
+        setError('Kon standaard stickerbibliotheek niet inladen.');
         setIsLoading(false);
-        // Fallback static data in case the file can't be fetched
-        setDefaultStickers([
-          {
-            id: 1,
-            name: "Bedankt!",
-            fileName: "sticker1_bedankt.pdf",
-            color: "#10b981",
-            icon: "Heart",
-            text: "Bedankt voor je bestelling!"
-          },
-          {
-            id: 2,
-            name: "Handmade",
-            fileName: "sticker2_handmade.pdf",
-            color: "#f59e0b",
-            icon: "Hammer",
-            text: "Handmade with Love"
-          },
-          {
-            id: 3,
-            name: "Gefeliciteerd",
-            fileName: "sticker3_gefeliciteerd.pdf",
-            color: "#3b82f6",
-            icon: "PartyPopper",
-            text: "Hoera! Gefeliciteerd!"
-          },
-          {
-            id: 4,
-            name: "Speciaal voor Jou",
-            fileName: "sticker4_speciaal.pdf",
-            color: "#ec4899",
-            icon: "Gift",
-            text: "Speciaal voor jou ingepakt"
-          },
-          {
-            id: 5,
-            name: "Biologisch & Vers",
-            fileName: "sticker5_biologisch.pdf",
-            color: "#84cc16",
-            icon: "Leaf",
-            text: "100% Natuurlijk & Biologisch"
-          }
-        ]);
       });
+  };
+
+  useEffect(() => {
+    loadDefaultStickers();
   }, []);
 
-  // Handle PDF file upload
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // Helper to convert Uint8Array to base64
+  const uint8ToBase64 = (bytes: Uint8Array): string => {
+    let binary = '';
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  };
 
-    if (file.type !== 'application/pdf') {
-      alert('Selecteer a.u.b. een geldig PDF bestand.');
+  // Try saving to local Vite server if in development mode
+  const trySaveToServer = async (
+    filesPayload: { name: string; dataBase64: string }[]
+  ): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/upload-stickers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ files: filesPayload }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          // Reload default stickers so the newly saved files show up in standard library
+          loadDefaultStickers();
+          return true;
+        }
+      }
+    } catch {
+      // Endpoint not available (e.g. running on Vercel static build)
+    }
+    return false;
+  };
+
+  // Handle file selection (single or multiple)
+  const handleFiles = async (files: FileList | File[] | null) => {
+    if (!files || files.length === 0) return;
+
+    const pdfFiles = Array.from(files).filter(
+      (f) => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+    );
+
+    if (pdfFiles.length === 0) {
+      alert('Selecteer a.u.b. geldige PDF bestanden.');
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const arrayBuffer = event.target?.result as ArrayBuffer;
-      setUploadedBytes(new Uint8Array(arrayBuffer));
-      setUploadedFileName(file.name);
-      
-      // Auto-populate name with the file name (without extension)
-      const defaultLabel = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
-      setCustomName(defaultLabel.charAt(0).toUpperCase() + defaultLabel.slice(1));
-      setShowUploadModal(true);
-    };
-    reader.readAsArrayBuffer(file);
+    // Single file upload: open customizer modal with instant live thumbnail
+    if (pdfFiles.length === 1) {
+      const file = pdfFiles[0];
+      setIsProcessing(true);
+      setProcessingStatus(`Thumbnail genereren voor ${file.name}...`);
+
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const bytes = new Uint8Array(arrayBuffer);
+        const thumb = await generatePdfThumbnail(bytes);
+        const cleanedName = cleanStickerName(file.name);
+
+        setUploadedBytes(bytes);
+        setUploadedFileName(file.name);
+        setCustomName(cleanedName);
+        setCustomText('');
+        setCustomColor('#6366f1');
+        setUploadedThumbnail(thumb);
+        setShowUploadModal(true);
+      } catch (err) {
+        console.error('Fout bij verwerken van PDF:', err);
+        alert('Er is een fout opgetreden bij het inlezen van het PDF bestand.');
+      } finally {
+        setIsProcessing(false);
+        setProcessingStatus('');
+      }
+      return;
+    }
+
+    // Batch upload (multiple PDFs)
+    setIsProcessing(true);
+    setProcessingStatus(`0 / ${pdfFiles.length} stickers verwerken...`);
+
+    const newStickers: Sticker[] = [];
+    const serverPayload: { name: string; dataBase64: string }[] = [];
+    const colors = ['#10b981', '#f59e0b', '#3b82f6', '#ec4899', '#84cc16', '#6366f1', '#14b8a6', '#f43f5e'];
+
+    for (let i = 0; i < pdfFiles.length; i++) {
+      const file = pdfFiles[i];
+      setProcessingStatus(`${i + 1} / ${pdfFiles.length}: "${cleanStickerName(file.name)}"...`);
+
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const bytes = new Uint8Array(arrayBuffer);
+        const thumb = await generatePdfThumbnail(bytes);
+        const name = cleanStickerName(file.name);
+
+        serverPayload.push({
+          name: file.name,
+          dataBase64: uint8ToBase64(bytes),
+        });
+
+        newStickers.push({
+          id: `custom_${Date.now()}_${i}`,
+          name,
+          fileName: file.name,
+          color: colors[i % colors.length],
+          icon: 'FileText',
+          text: name,
+          isCustom: true,
+          pdfBytes: bytes,
+          thumbnailUrl: thumb,
+        });
+      } catch (err) {
+        console.error(`Fout bij verwerken van ${file.name}:`, err);
+      }
+    }
+
+    // Check if we can sync directly to localhost server public/PDFs/
+    const savedToServer = await trySaveToServer(serverPayload);
+
+    if (!savedToServer && newStickers.length > 0) {
+      // Save locally to IndexedDB/state
+      if (onAddMultipleCustomStickers) {
+        onAddMultipleCustomStickers(newStickers);
+      } else {
+        newStickers.forEach((st) => onAddCustomSticker(st));
+      }
+    }
+
+    setIsProcessing(false);
+    setProcessingStatus('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleSaveCustomSticker = (e: React.FormEvent) => {
+  const handleSaveSingleCustomSticker = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadedBytes || !customName.trim()) return;
 
-    const newSticker: Sticker = {
-      id: `custom_${Date.now()}`,
-      name: customName,
-      fileName: uploadedFileName,
-      color: customColor,
-      icon: 'FileText',
-      text: customText.trim() || 'Geüploade Sticker-PDF',
-      isCustom: true,
-      pdfBytes: uploadedBytes,
-    };
+    // Check if localhost dev server can save it to public/PDFs
+    const serverPayload = [
+      {
+        name: uploadedFileName,
+        dataBase64: uint8ToBase64(uploadedBytes),
+      },
+    ];
+    const savedToServer = await trySaveToServer(serverPayload);
 
-    onAddCustomSticker(newSticker);
-    
+    if (!savedToServer) {
+      const newSticker: Sticker = {
+        id: `custom_${Date.now()}`,
+        name: customName.trim(),
+        fileName: uploadedFileName,
+        color: customColor,
+        icon: 'FileText',
+        text: customText.trim() || customName.trim(),
+        isCustom: true,
+        pdfBytes: uploadedBytes,
+        thumbnailUrl: uploadedThumbnail,
+      };
+      onAddCustomSticker(newSticker);
+    }
+
     // Reset state & close modal
     setCustomName('');
     setCustomText('');
     setCustomColor('#6366f1');
     setUploadedBytes(null);
     setUploadedFileName('');
+    setUploadedThumbnail('');
     setShowUploadModal(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  // Helper to dynamically render Lucide Icons by name
-  const renderIcon = (iconName: string, color: string) => {
-    const IconComponent = (Icons as any)[iconName] || Icons.HelpCircle;
-    return <IconComponent className="w-6 h-6" style={{ color }} />;
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const allStickers = [...defaultStickers, ...customStickers];
-  
-  const filteredStickers = allStickers.filter(sticker => 
-    sticker.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    (sticker.fileName && sticker.fileName.toLowerCase().includes(searchQuery.toLowerCase()))
+
+  const tabFilteredStickers = allStickers.filter((sticker) => {
+    if (activeTab === 'default') return !sticker.isCustom;
+    if (activeTab === 'custom') return sticker.isCustom;
+    return true;
+  });
+
+  const filteredStickers = tabFilteredStickers.filter(
+    (sticker) =>
+      sticker.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (sticker.fileName && sticker.fileName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-full flex flex-col" id="sticker-library">
+      {/* Header */}
       <div className="flex flex-wrap items-end justify-between mb-4 pb-4 border-b border-slate-100 gap-3">
         <div className="min-w-0 flex-1 pr-2">
           <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2 whitespace-nowrap">
@@ -166,7 +258,7 @@ export default function Library({
             1. De Bibliotheek
           </h2>
           <p className="text-xs text-slate-500 mt-1 line-clamp-2">
-            Kies uit standaard stickers of upload je eigen PDF.
+            Kies uit standaard stickers of sleep nieuwe PDF-stickers hierheen.
           </p>
         </div>
         <div className="relative shrink-0">
@@ -181,31 +273,97 @@ export default function Library({
         </div>
       </div>
 
-      {/* Upload area */}
-      <div className="mb-6">
-        <label className="group relative flex flex-col items-center justify-center border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-slate-50/50 hover:bg-indigo-50/20 rounded-xl p-5 cursor-pointer transition-all duration-200 ease-in-out text-center">
+      {/* Tabs */}
+      <div className="flex items-center gap-2 mb-4">
+        <button
+          onClick={() => setActiveTab('all')}
+          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+            activeTab === 'all'
+              ? 'bg-indigo-600 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          Alle ({allStickers.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('default')}
+          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+            activeTab === 'default'
+              ? 'bg-indigo-600 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          Standaard ({defaultStickers.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('custom')}
+          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+            activeTab === 'custom'
+              ? 'bg-indigo-600 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`}
+        >
+          <span>Eigen ({customStickers.length})</span>
+          {customStickers.length > 0 && (
+            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+          )}
+        </button>
+      </div>
+
+      {/* Upload Drag & Drop area */}
+      <div className="mb-4">
+        <label
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragging(false);
+            handleFiles(e.dataTransfer.files);
+          }}
+          className={`group relative flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-4 cursor-pointer transition-all duration-200 ease-in-out text-center ${
+            isDragging
+              ? 'border-indigo-500 bg-indigo-50/50 scale-[1.01]'
+              : 'border-slate-200 hover:border-indigo-400 bg-slate-50/50 hover:bg-indigo-50/20'
+          }`}
+        >
           <input
             type="file"
             accept=".pdf"
+            multiple
             className="hidden"
-            onChange={handleFileChange}
+            onChange={(e) => handleFiles(e.target.files)}
             ref={fileInputRef}
             id="file-upload-input"
           />
-          <div className="p-3 bg-white rounded-full shadow-sm border border-slate-100 text-slate-400 group-hover:text-indigo-500 group-hover:scale-110 transition-all duration-200">
-            <Icons.Upload className="w-6 h-6" />
-          </div>
-          <span className="text-sm font-semibold text-slate-700 mt-3 group-hover:text-indigo-600 transition-colors">
-            Upload eigen sticker-PDF
-          </span>
-          <span className="text-xs text-slate-400 mt-1">
-            Alleen .pdf bestanden (enkele ronde sticker)
-          </span>
+
+          {isProcessing ? (
+            <div className="flex flex-col items-center py-2 space-y-2">
+              <Icons.Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+              <span className="text-xs font-semibold text-indigo-600">
+                {processingStatus || 'PDF bestanden verwerken...'}
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className="p-2.5 bg-white rounded-full shadow-xs border border-slate-100 text-slate-400 group-hover:text-indigo-500 group-hover:scale-110 transition-all duration-200">
+                <Icons.Upload className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-bold text-slate-700 mt-2 group-hover:text-indigo-600 transition-colors">
+                Nieuwe sticker(s) uploaden
+              </span>
+              <span className="text-[11px] text-slate-400 mt-0.5">
+                Sleep 1 of meerdere PDF's hierheen, of klik om te kiezen
+              </span>
+            </>
+          )}
         </label>
       </div>
 
       {/* Stickers grid */}
-      <div className="flex-1 overflow-y-auto pr-2 pb-4 space-y-4 max-h-[calc(100vh-180px)]">
+      <div className="flex-1 overflow-y-auto pr-2 pb-4 space-y-4 max-h-[calc(100vh-230px)]">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-12 text-slate-400 space-y-3">
             <Icons.Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
@@ -215,74 +373,112 @@ export default function Library({
           <div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
               {filteredStickers.map((sticker) => (
-                <button
-                  key={sticker.id}
-                  id={`sticker-btn-${sticker.id}`}
-                  onClick={() => onAddSticker(sticker)}
-                  className="group relative flex flex-col items-center text-center p-3 bg-slate-50 hover:bg-indigo-50/50 rounded-xl border border-slate-100 hover:border-indigo-100 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-                >
-                  {/* Circle preview tag */}
-                  <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center shadow-sm relative shrink-0 transition-transform group-hover:scale-105 group-hover:shadow-md overflow-hidden mb-2.5"
-                    style={{ backgroundColor: sticker.isCustom ? `${sticker.color}15` : '#ffffff', border: sticker.isCustom ? `2px solid ${sticker.color}` : '1px solid #e2e8f0' }}
+                <div key={sticker.id} className="relative group">
+                  <button
+                    id={`sticker-btn-${sticker.id}`}
+                    onClick={() => onAddSticker(sticker)}
+                    className="w-full relative flex flex-col items-center text-center p-3 bg-slate-50 hover:bg-indigo-50/50 rounded-xl border border-slate-100 hover:border-indigo-100 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                   >
-                    {!sticker.isCustom && sticker.fileName ? (
-                        <img 
-                          src={`/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23').replace(/\+/g, '%2B')}`} 
+                    {/* Circle preview */}
+                    <div
+                      className="w-16 h-16 rounded-full flex items-center justify-center shadow-xs relative shrink-0 transition-transform group-hover:scale-105 group-hover:shadow-md overflow-hidden mb-2.5"
+                      style={{
+                        backgroundColor: '#ffffff',
+                        border: sticker.isCustom ? `2px solid ${sticker.color}` : '1px solid #e2e8f0',
+                      }}
+                    >
+                      {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
+                        <img
+                          src={
+                            sticker.thumbnailUrl ||
+                            `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png'))
+                              .replace(/#/g, '%23')
+                              .replace(/\+/g, '%2B')}`
+                          }
                           alt={sticker.name}
-                        className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
-                        style={{ transform: 'translate(-50%, -50%)' }}
-                      />
-                    ) : (
-                      <>
-                        <div
-                          className="absolute inset-1 rounded-full border border-dashed border-white/50"
-                          style={{ backgroundColor: sticker.color }}
-                        ></div>
-                        <div className="relative z-10 flex items-center justify-center">
-                          <Icons.FileText className="w-5 h-5 text-white" />
-                        </div>
-                      </>
-                    )}
+                          className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
+                          style={{ transform: 'translate(-50%, -50%)' }}
+                        />
+                      ) : (
+                        <>
+                          <div
+                            className="absolute inset-1 rounded-full border border-dashed border-white/50"
+                            style={{ backgroundColor: sticker.color }}
+                          ></div>
+                          <div className="relative z-10 flex items-center justify-center">
+                            <Icons.FileText className="w-5 h-5 text-white" />
+                          </div>
+                        </>
+                      )}
 
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-indigo-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
-                      <Icons.Plus className="w-6 h-6 text-white drop-shadow-md" />
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-indigo-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+                        <Icons.Plus className="w-6 h-6 text-white drop-shadow-md" />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="w-full px-1">
-                    <h3 className="font-semibold text-xs leading-tight text-slate-700 line-clamp-2 group-hover:text-indigo-600 transition-colors">
-                      {sticker.name}
-                    </h3>
-                  </div>
-                </button>
+                    <div className="w-full px-1">
+                      <h3 className="font-semibold text-xs leading-tight text-slate-700 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                        {sticker.name}
+                      </h3>
+                      {sticker.isCustom && (
+                        <span className="inline-block mt-1 text-[9px] font-bold text-indigo-500 bg-indigo-50 px-1.5 py-0.5 rounded">
+                          Eigen sticker
+                        </span>
+                      )}
+                    </div>
+                  </button>
+
+                  {/* Delete button for custom stickers */}
+                  {sticker.isCustom && onDeleteCustomSticker && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (
+                          window.confirm(
+                            `Weet je zeker dat je sticker "${sticker.name}" wilt verwijderen uit je bibliotheek?`
+                          )
+                        ) {
+                          onDeleteCustomSticker(sticker.id);
+                        }
+                      }}
+                      title="Verwijder deze eigen sticker"
+                      className="absolute top-1.5 right-1.5 z-30 p-1 bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-full shadow-xs border border-slate-200 transition-all opacity-0 group-hover:opacity-100"
+                    >
+                      <Icons.Trash2 className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
 
-            {allStickers.length === 0 && (
-              <div className="text-center py-8 text-slate-400">
-                Geen stickers beschikbaar. Upload er een!
+            {filteredStickers.length === 0 && (
+              <div className="text-center py-8 text-slate-400 text-xs">
+                {activeTab === 'custom'
+                  ? 'Nog geen eigen stickers geüpload. Sleep een PDF hierboven naar binnen!'
+                  : 'Geen stickers gevonden voor deze zoekopdracht.'}
               </div>
             )}
           </div>
         )}
       </div>
 
-      {/* Upload Custom Sticker Modal / Overlay */}
+      {/* Single Upload Custom Sticker Modal */}
       {showUploadModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <Icons.FileText className="text-indigo-500 w-5 h-5" />
-                Nieuwe Sticker Aanpassen
+                <Icons.Sparkles className="text-indigo-500 w-5 h-5" />
+                Nieuwe Sticker Toevoegen
               </h3>
               <button
                 type="button"
                 onClick={() => {
                   setShowUploadModal(false);
                   setUploadedBytes(null);
+                  setUploadedThumbnail('');
                 }}
                 className="text-slate-400 hover:text-slate-600 p-1 hover:bg-slate-200/50 rounded-lg transition-colors"
               >
@@ -290,15 +486,26 @@ export default function Library({
               </button>
             </div>
 
-            <form onSubmit={handleSaveCustomSticker} className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
-                  Geselecteerd PDF Bestand:
-                </label>
-                <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-slate-500 text-xs truncate">
-                  <Icons.FileText className="w-4 h-4 text-indigo-400 shrink-0" />
-                  <span className="truncate">{uploadedFileName}</span>
+            <form onSubmit={handleSaveSingleCustomSticker} className="p-6 space-y-4">
+              {/* Live Thumbnail Preview */}
+              <div className="flex flex-col items-center justify-center pb-2">
+                <div
+                  className="w-24 h-24 rounded-full shadow-md border-2 overflow-hidden flex items-center justify-center relative bg-white"
+                  style={{ borderColor: customColor }}
+                >
+                  {uploadedThumbnail ? (
+                    <img
+                      src={uploadedThumbnail}
+                      alt={customName}
+                      className="w-[120%] h-[120%] max-w-none object-cover"
+                    />
+                  ) : (
+                    <Icons.FileText className="w-8 h-8 text-indigo-500" />
+                  )}
                 </div>
+                <span className="text-[11px] text-slate-400 mt-2 font-mono truncate max-w-[280px]">
+                  {uploadedFileName}
+                </span>
               </div>
 
               <div>
@@ -310,27 +517,14 @@ export default function Library({
                   required
                   value={customName}
                   onChange={(e) => setCustomName(e.target.value)}
-                  placeholder="Bijv: Logo Bedankt"
+                  placeholder="Bijv: Oude Kaas 48+"
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
-                  Subtekst / Beschrijving (Optioneel)
-                </label>
-                <input
-                  type="text"
-                  value={customText}
-                  onChange={(e) => setCustomText(e.target.value)}
-                  placeholder="Bijv: Bedankt voor je bestelling"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
-                  Themakleur (voor UI & Fallback)
+                  Themakleur Rand
                 </label>
                 <div className="flex items-center gap-3">
                   <input
@@ -355,6 +549,7 @@ export default function Library({
                   onClick={() => {
                     setShowUploadModal(false);
                     setUploadedBytes(null);
+                    setUploadedThumbnail('');
                   }}
                   className="px-4 py-2 text-sm font-semibold text-slate-500 hover:bg-slate-50 rounded-lg transition-colors border border-slate-200"
                 >
@@ -364,7 +559,7 @@ export default function Library({
                   type="submit"
                   className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-1.5"
                 >
-                  <Icons.Check className="w-4 h-4" /> Opslaan in Bieb
+                  <Icons.Check className="w-4 h-4" /> Toevoegen aan Bieb
                 </button>
               </div>
             </form>

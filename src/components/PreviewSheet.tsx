@@ -103,10 +103,10 @@ export default function PreviewSheet({ selectedItems, layout }: PreviewSheetProp
                     className="w-[92%] h-[92%] rounded-full shadow-xs flex flex-col items-center justify-center relative overflow-hidden transition-all duration-200 hover:scale-105"
                     style={{ backgroundColor: sticker.isCustom ? sticker.color : '#ffffff' }}
                   >
-                    {!sticker.isCustom && sticker.fileName ? (
+                    {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
                       <>
                         <img 
-                          src={`/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23').replace(/\+/g, '%2B')}`} 
+                          src={sticker.thumbnailUrl || `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23').replace(/\+/g, '%2B')}`} 
                           alt={sticker.name}
                           className="absolute top-1/2 left-1/2 max-w-none"
                           style={{ 

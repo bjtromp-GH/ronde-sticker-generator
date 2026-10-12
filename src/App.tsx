@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Icons from 'lucide-react';
 import Library from './components/Library';
 import PreviewSheet from './components/PreviewSheet';
@@ -11,6 +11,12 @@ import SelectionPanel, { PRESET_LAYOUTS } from './components/SelectionPanel';
 import { Sticker, SelectedItem, GridLayout } from './types';
 import { generateA4StickerPDF } from './utils/pdfGenerator';
 import { extractTextFromPDF } from './utils/pdfTextExtractor';
+import {
+  getAllCustomStickers,
+  saveCustomSticker,
+  saveMultipleCustomStickers,
+  deleteCustomStickerFromDB,
+} from './utils/stickerStorage';
 
 export default function App() {
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
@@ -18,6 +24,15 @@ export default function App() {
   const [layout, setLayout] = useState<GridLayout>({ ...PRESET_LAYOUTS[2] }); // Default to 5x8 grid (30mm)
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  // Load custom stickers from IndexedDB on startup
+  useEffect(() => {
+    getAllCustomStickers().then((saved) => {
+      if (saved && saved.length > 0) {
+        setCustomStickers(saved);
+      }
+    });
+  }, []);
 
   const totalCapacity = layout.rows * layout.cols;
   const currentTotal = selectedItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -54,9 +69,25 @@ export default function App() {
   // Add uploaded custom PDF sticker to library
   const handleAddCustomSticker = (newSticker: Sticker) => {
     setCustomStickers((prev) => [newSticker, ...prev]);
+    saveCustomSticker(newSticker);
     // Auto add to selection as well for convenience
     handleAddSticker(newSticker);
     triggerAlert(`Sticker "${newSticker.name}" is toegevoegd aan de bibliotheek!`);
+  };
+
+  // Add multiple uploaded stickers in batch
+  const handleAddMultipleCustomStickers = (newStickers: Sticker[]) => {
+    setCustomStickers((prev) => [...newStickers, ...prev]);
+    saveMultipleCustomStickers(newStickers);
+    triggerAlert(`${newStickers.length} stickers zijn toegevoegd aan de bibliotheek!`);
+  };
+
+  // Delete custom sticker from library and IndexedDB
+  const handleDeleteCustomSticker = (id: string | number) => {
+    setCustomStickers((prev) => prev.filter((s) => s.id !== id));
+    setSelectedItems((prev) => prev.filter((item) => item.sticker.id !== id));
+    deleteCustomStickerFromDB(id);
+    triggerAlert('Sticker is verwijderd uit je bibliotheek.');
   };
 
   // Import order form and auto-fill
@@ -243,6 +274,8 @@ export default function App() {
             onAddSticker={handleAddSticker}
             customStickers={customStickers}
             onAddCustomSticker={handleAddCustomSticker}
+            onAddMultipleCustomStickers={handleAddMultipleCustomStickers}
+            onDeleteCustomSticker={handleDeleteCustomSticker}
           />
         </section>
 
