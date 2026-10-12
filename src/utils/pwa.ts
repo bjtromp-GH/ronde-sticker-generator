@@ -207,9 +207,11 @@ export async function cacheAllStickersForOffline(
   const urlsToCache: string[] = [];
   for (const sticker of stickers) {
     if (sticker.fileName) {
-      urlsToCache.push(`/PDFs/${sticker.fileName}`);
+      const encodedPdf = encodeURI(sticker.fileName).replace(/#/g, '%23');
+      urlsToCache.push(`/PDFs/${encodedPdf}`);
       const thumbName = sticker.fileName.replace(/\.pdf$/i, '.png');
-      urlsToCache.push(`/thumbnails/${thumbName}`);
+      const encodedThumb = encodeURI(thumbName).replace(/#/g, '%23');
+      urlsToCache.push(`/thumbnails/${encodedThumb}`);
     }
   }
 

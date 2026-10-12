@@ -12,6 +12,14 @@ export default defineConfig(() => {
       {
         name: 'sticker-upload-api',
         configureServer(server) {
+          // Pre-middleware to sanitize any raw '%' in URLs so decodeURI doesn't throw 'URI malformed'
+          server.middlewares.use((req, _res, next) => {
+            if (req.url && req.url.includes('%')) {
+              req.url = req.url.replace(/%(?![0-9a-fA-F]{2})/g, '%25');
+            }
+            next();
+          });
+
           server.middlewares.use('/api/upload-stickers', async (req, res, next) => {
             if (req.method !== 'POST') {
               return next();

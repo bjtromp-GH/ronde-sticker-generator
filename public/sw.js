@@ -150,8 +150,9 @@ self.addEventListener('message', async (event) => {
     let completed = 0;
     const total = urls.length;
 
-    for (const url of urls) {
+    for (const rawUrl of urls) {
       try {
+        const url = encodeURI(rawUrl).replace(/#/g, '%23');
         const existing = await cache.match(url);
         if (!existing) {
           const res = await fetch(url);
