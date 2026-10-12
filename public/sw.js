@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sticker-a4-v1';
+const CACHE_NAME = 'sticker-a4-v2';
 
 const CORE_ASSETS = [
   '/',

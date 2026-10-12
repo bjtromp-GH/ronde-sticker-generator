@@ -12,10 +12,15 @@ export default defineConfig(() => {
       {
         name: 'sticker-upload-api',
         configureServer(server) {
-          // Pre-middleware to sanitize any raw '%' in URLs so decodeURI doesn't throw 'URI malformed'
+          // Pre-middleware to decode %2B to + and sanitize any raw '%' so Vite static middleware finds files
           server.middlewares.use((req, _res, next) => {
-            if (req.url && req.url.includes('%')) {
-              req.url = req.url.replace(/%(?![0-9a-fA-F]{2})/g, '%25');
+            if (req.url) {
+              if (req.url.includes('%2B') || req.url.includes('%2b')) {
+                req.url = req.url.replace(/%2B/gi, '+');
+              }
+              if (req.url.includes('%')) {
+                req.url = req.url.replace(/%(?![0-9a-fA-F]{2})/g, '%25');
+              }
             }
             next();
           });

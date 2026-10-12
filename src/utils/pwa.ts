@@ -122,7 +122,7 @@ export async function getOfflineStatus(): Promise<CacheStatus> {
   }
 
   try {
-    const cache = await caches.open('sticker-a4-v1');
+    const cache = await caches.open('sticker-a4-v2');
     const requests = await cache.keys();
     let pdfCount = 0;
     let thumbCount = 0;
@@ -183,7 +183,7 @@ export async function cacheAllStickersForOffline(
   }
 
   const stickers = await res.json();
-  const cache = await caches.open('sticker-a4-v1');
+  const cache = await caches.open('sticker-a4-v2');
 
   // Pre-cache standard fonts as well
   const standardFonts = [
