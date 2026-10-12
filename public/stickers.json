@@ -1289,9 +1289,17 @@
   },
   {
     "id": 162,
+    "name": "ZWARTRECLAME",
+    "fileName": "VE_Ø30mm_ZWARTRECLAME.pdf",
+    "color": "#f59e0b",
+    "icon": "FileText",
+    "text": "ZWARTRECLAME"
+  },
+  {
+    "id": 163,
     "name": "Zwitserland",
     "fileName": "VE_Ø30mm_Zwitserland.pdf",
-    "color": "#f59e0b",
+    "color": "#3b82f6",
     "icon": "FileText",
     "text": "Zwitserland"
   }

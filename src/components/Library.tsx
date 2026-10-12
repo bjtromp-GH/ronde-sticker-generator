@@ -438,8 +438,7 @@ export default function Library({
                           src={
                             sticker.thumbnailUrl ||
                             `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png'))
-                              .replace(/#/g, '%23')
-                              .replace(/\+/g, '%2B')}`
+                              .replace(/#/g, '%23')}`
                           }
                           alt={sticker.name}
                           className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
