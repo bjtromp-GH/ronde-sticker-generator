@@ -11,7 +11,7 @@ export async function generatePdfThumbnail(pdfBytes: Uint8Array): Promise<string
   try {
     const loadingTask = pdfjsLib.getDocument({
       data: pdfBytes.slice(0),
-      standardFontDataUrl: `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/standard_fonts/`,
+      standardFontDataUrl: '/standard_fonts/',
     });
 
     const pdfDoc = await loadingTask.promise;

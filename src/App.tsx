@@ -17,6 +17,16 @@ import {
   saveMultipleCustomStickers,
   deleteCustomStickerFromDB,
 } from './utils/stickerStorage';
+import {
+  canInstallPWA,
+  onInstallableChange,
+  promptPWAInstall,
+  isRunningStandalone,
+  getOfflineStatus,
+  cacheAllStickersForOffline,
+  CacheStatus,
+  CacheProgress,
+} from './utils/pwa';
 
 export default function App() {
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
@@ -24,6 +34,16 @@ export default function App() {
   const [layout, setLayout] = useState<GridLayout>({ ...PRESET_LAYOUTS[2] }); // Default to 5x8 grid (30mm)
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  // PWA and Offline states
+  const [isOnline, setIsOnline] = useState<boolean>(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [canInstall, setCanInstall] = useState<boolean>(false);
+  const [isStandalone, setIsStandalone] = useState<boolean>(isRunningStandalone());
+  const [offlineStatus, setOfflineStatus] = useState<CacheStatus | null>(null);
+  const [showOfflineModal, setShowOfflineModal] = useState<boolean>(false);
+  const [showInstallHelpModal, setShowInstallHelpModal] = useState<boolean>(false);
+  const [isCaching, setIsCaching] = useState<boolean>(false);
+  const [cacheProgress, setCacheProgress] = useState<CacheProgress | null>(null);
 
   // Load custom stickers from IndexedDB on startup
   useEffect(() => {
@@ -33,6 +53,57 @@ export default function App() {
       }
     });
   }, []);
+
+  // Listen to network status, PWA install prompt, and cache status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    const unsub = onInstallableChange((can) => {
+      setCanInstall(can);
+    });
+
+    getOfflineStatus().then(setOfflineStatus);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+      unsub();
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (canInstall) {
+      const accepted = await promptPWAInstall();
+      if (accepted) {
+        setIsStandalone(true);
+        triggerAlert('Geweldig! De app is nu geïnstalleerd en vindbaar in je programma\'s.');
+      }
+    } else {
+      setShowInstallHelpModal(true);
+    }
+  };
+
+  const handleStartCacheAll = async () => {
+    try {
+      setIsCaching(true);
+      setCacheProgress({ completed: 0, total: 100, percentage: 0 });
+      await cacheAllStickersForOffline((prog) => {
+        setCacheProgress(prog);
+      });
+      const updated = await getOfflineStatus();
+      setOfflineStatus(updated);
+      triggerAlert('Alle stickers en thumbnails zijn succesvol offline opgeslagen in je browser!');
+    } catch (err: any) {
+      console.error(err);
+      triggerAlert(`Fout bij offline cachen: ${err?.message || 'Onbekende fout'}`);
+    } finally {
+      setIsCaching(false);
+    }
+  };
 
   const totalCapacity = layout.rows * layout.cols;
   const currentTotal = selectedItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -233,6 +304,57 @@ export default function App() {
             </div>
           </div>
 
+          {/* Header Action Badges & Buttons */}
+          <div className="flex items-center flex-wrap gap-2.5">
+            {/* Online / Offline status badge */}
+            <div
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                isOnline
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-amber-50 text-amber-700 border-amber-200'
+              }`}
+              title={isOnline ? 'Online (en offline gereed)' : 'Geen internetverbinding (werkt offline)'}
+            >
+              {isOnline ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  <span>{offlineStatus?.isFullyCached ? '100% Offline Gereed' : 'Online'}</span>
+                </>
+              ) : (
+                <>
+                  <Icons.WifiOff className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>Offline Modus</span>
+                </>
+              )}
+            </div>
+
+            {/* Offline Cache Button */}
+            <button
+              onClick={() => setShowOfflineModal(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-xl border border-slate-200/70 transition-all cursor-pointer"
+              title="Beheer offline opslag van stickers"
+            >
+              <Icons.HardDrive className="w-3.5 h-3.5 text-slate-500" />
+              <span>Offline Opslag</span>
+              {offlineStatus && offlineStatus.pdfCount > 0 && (
+                <span className="ml-0.5 px-1.5 py-0.2 bg-white text-slate-600 rounded-md text-[10px] font-bold border border-slate-200">
+                  {offlineStatus.pdfCount}
+                </span>
+              )}
+            </button>
+
+            {/* Install PWA Button (if not already opened in standalone mode) */}
+            {!isStandalone && (
+              <button
+                onClick={handleInstallClick}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:scale-98 rounded-xl shadow-xs shadow-indigo-600/20 transition-all cursor-pointer"
+                title="Installeer als standalone desktop app"
+              >
+                <Icons.Download className="w-3.5 h-3.5" />
+                <span>Installeer App</span>
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -320,6 +442,184 @@ export default function App() {
       <footer className="bg-white border-t border-slate-100 py-4 px-6 text-center text-xs text-slate-400 mt-auto">
         <p>© 2026 Ronde Sticker A4 Generator. Gebouwd met React, Tailwind CSS en pdf-lib.</p>
       </footer>
+
+      {/* Offline Storage Modal */}
+      {showOfflineModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-md w-full p-6 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
+                  <Icons.HardDrive className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-base">Offline Opslag & Caching</h3>
+                  <p className="text-xs text-slate-500">Gebruik de generator overal zonder internet</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowOfflineModal(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+              >
+                <Icons.X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="py-4 space-y-4">
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Door alle stickers vooraf offline op te slaan, worden de originele PDF-vectoren en afbeeldingen in je browser bewaard. Je kunt daarna overal stickervellen ontwerpen en downloaden, zelfs in een magazijn of onderweg zonder wifi.
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <div className="text-[11px] font-medium text-slate-400">PDF Stickers Opgeslagen</div>
+                  <div className="text-xl font-bold text-slate-800 mt-0.5">
+                    {offlineStatus?.pdfCount ?? 0}
+                    <span className="text-xs font-normal text-slate-400 ml-1">
+                      / {offlineStatus?.totalStickers || 163}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                  <div className="text-[11px] font-medium text-slate-400">Thumbnails Opgeslagen</div>
+                  <div className="text-xl font-bold text-slate-800 mt-0.5">
+                    {offlineStatus?.thumbCount ?? 0}
+                    <span className="text-xs font-normal text-slate-400 ml-1">
+                      / {offlineStatus?.totalStickers || 163}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress bar during caching */}
+              {isCaching && (
+                <div className="p-3.5 bg-indigo-50/70 border border-indigo-100 rounded-xl space-y-2">
+                  <div className="flex justify-between items-center text-xs font-medium text-indigo-900">
+                    <span className="flex items-center gap-1.5">
+                      <Icons.Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600" />
+                      Stickers downloaden & cachen...
+                    </span>
+                    <span>{cacheProgress?.percentage ?? 0}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-indigo-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-600 transition-all duration-200 rounded-full"
+                      style={{ width: `${cacheProgress?.percentage ?? 0}%` }}
+                    />
+                  </div>
+                  <div className="text-[10px] text-indigo-600 text-right">
+                    {cacheProgress?.completed ?? 0} / {cacheProgress?.total ?? 0} bestanden
+                  </div>
+                </div>
+              )}
+
+              {offlineStatus?.isFullyCached && !isCaching && (
+                <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-2.5 text-xs text-emerald-800 font-medium">
+                  <Icons.CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Alle {offlineStatus.totalStickers} stickers zijn 100% lokaal opgeslagen en direct offline klaar voor gebruik!</span>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+              <button
+                onClick={() => setShowOfflineModal(false)}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all cursor-pointer"
+              >
+                Sluiten
+              </button>
+              <button
+                onClick={handleStartCacheAll}
+                disabled={isCaching}
+                className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-xl shadow-xs transition-all cursor-pointer"
+              >
+                {isCaching ? (
+                  <>
+                    <Icons.Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Downloaden...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icons.DownloadCloud className="w-3.5 h-3.5" />
+                    <span>{offlineStatus?.isFullyCached ? 'Opnieuw Cachen' : 'Alles Nu Offline Opslaan'}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Install Help Modal */}
+      {showInstallHelpModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-md w-full p-6 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
+                  <Icons.Laptop className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900 text-base">App Installeren</h3>
+                  <p className="text-xs text-slate-500">Gebruik als standalone programma</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowInstallHelpModal(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+              >
+                <Icons.X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="py-4 space-y-3.5 text-xs text-slate-600">
+              <p>
+                Je kunt deze generator rechtstreeks als losse desktop-applicatie op je computer installeren:
+              </p>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1.5">
+                <div className="font-bold text-slate-800 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                  Google Chrome of Microsoft Edge
+                </div>
+                <p className="text-slate-600">
+                  Klik rechtsboven in de adresbalk op het <strong>Installatie-icoon</strong> (schermpje met pijltje naar beneden) of ga in het menu naar <em>Apps ➔ Deze app installeren</em>.
+                </p>
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1.5">
+                <div className="font-bold text-slate-800 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                  Safari op Mac (macOS Sonoma / Sequoia)
+                </div>
+                <p className="text-slate-600">
+                  Klik in de bovenste menubalk op <strong>Archief (File)</strong> ➔ <strong>Voeg toe aan Dock...</strong>. De generator opent dan als een echte Mac-app met een eigen venster!
+                </p>
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1.5">
+                <div className="font-bold text-slate-800 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                  iPad of iPhone
+                </div>
+                <p className="text-slate-600">
+                  Tik op de Deel-knop onderaan en kies <strong>Zet op beginscherm</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex justify-end">
+              <button
+                onClick={() => setShowInstallHelpModal(false)}
+                className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-all cursor-pointer"
+              >
+                Begrepen
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

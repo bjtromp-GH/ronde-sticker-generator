@@ -10,6 +10,25 @@ const thumbnailsDir = path.join(__dirname, '..', 'public', 'thumbnails');
 const outputJson = path.join(__dirname, '..', 'public', 'stickers.json');
 
 const colors = ['#10b981', '#f59e0b', '#3b82f6', '#ec4899', '#84cc16', '#6366f1', '#14b8a6', '#f43f5e'];
+const fontsSrcDir = path.join(__dirname, '..', 'node_modules', 'pdfjs-dist', 'standard_fonts');
+const fontsDestDir = path.join(__dirname, '..', 'public', 'standard_fonts');
+
+export function copyStandardFonts() {
+    if (fs.existsSync(fontsSrcDir)) {
+        if (!fs.existsSync(fontsDestDir)) {
+            fs.mkdirSync(fontsDestDir, { recursive: true });
+        }
+        const fontFiles = fs.readdirSync(fontsSrcDir);
+        for (const fontFile of fontFiles) {
+            const src = path.join(fontsSrcDir, fontFile);
+            const dst = path.join(fontsDestDir, fontFile);
+            if (!fs.existsSync(dst)) {
+                fs.copyFileSync(src, dst);
+            }
+        }
+        console.log('Standard PDF fonts verified for offline use.');
+    }
+}
 
 export async function generateThumbnails() {
     if (!fs.existsSync(thumbnailsDir)) {
@@ -67,6 +86,8 @@ export async function generateStickersAndThumbnails() {
     if (!fs.existsSync(thumbnailsDir)) {
         fs.mkdirSync(thumbnailsDir, { recursive: true });
     }
+
+    copyStandardFonts();
 
     const files = fs.readdirSync(pdfsDir).filter(f => f.endsWith('.pdf'));
 
