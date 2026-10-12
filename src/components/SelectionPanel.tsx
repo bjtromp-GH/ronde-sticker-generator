@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Icons from 'lucide-react';
 import { SelectedItem, GridLayout } from '../types';
+import { getStickerThumbnailUrl } from '../utils/urlHelper';
 
 interface SelectionPanelProps {
   selectedItems: SelectedItem[];
@@ -151,7 +152,7 @@ export default function SelectionPanel({
                   >
                     {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
                       <img 
-                        src={sticker.thumbnailUrl || `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23')}`} 
+                        src={sticker.thumbnailUrl || getStickerThumbnailUrl(sticker.fileName)} 
                         alt={sticker.name}
                         className="w-[120%] h-[120%] max-w-none object-cover"
                       />

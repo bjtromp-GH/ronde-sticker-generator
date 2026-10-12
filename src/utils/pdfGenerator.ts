@@ -1,5 +1,6 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { Sticker, SelectedItem, GridLayout } from '../types';
+import { getStickerPdfUrl } from './urlHelper';
 
 // Convert millimeters to PDF points (1 inch = 25.4 mm = 72 points)
 const MM_TO_PT = 2.83464567;
@@ -38,14 +39,7 @@ export async function generateA4StickerPDF(
   for (const item of selectedItems) {
     if (!item.sticker.isCustom && item.sticker.fileName && !fetchedPdfs[item.sticker.fileName]) {
       try {
-        // Handle fileName that might already contain 'PDFs/' or not
-        // We use encodeURI so characters like '%' become '%25',
-        // but characters like '+' remain unencoded because Vite expects them that way.
-        const encodedFileName = encodeURI(item.sticker.fileName).replace(/#/g, '%23');
-        
-        const urlPath = item.sticker.fileName.startsWith('PDFs/') 
-          ? `/${encodedFileName}` 
-          : `/PDFs/${encodedFileName}`;
+        const urlPath = getStickerPdfUrl(item.sticker.fileName);
         const response = await fetch(urlPath);
         if (response.ok) {
           const arrayBuffer = await response.arrayBuffer();

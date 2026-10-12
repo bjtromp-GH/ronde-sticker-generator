@@ -152,7 +152,7 @@ self.addEventListener('message', async (event) => {
 
     for (const rawUrl of urls) {
       try {
-        const url = encodeURI(rawUrl).replace(/#/g, '%23');
+        const url = encodeURI(rawUrl).replace(/#/g, '%23').replace(/\+/g, '%2B');
         const existing = await cache.match(url);
         if (!existing) {
           const res = await fetch(url);

@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Icons from 'lucide-react';
 import { Sticker, SelectedItem, GridLayout } from '../types';
+import { getStickerThumbnailUrl } from '../utils/urlHelper';
 
 interface PreviewSheetProps {
   selectedItems: SelectedItem[];
@@ -106,7 +107,7 @@ export default function PreviewSheet({ selectedItems, layout }: PreviewSheetProp
                     {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
                       <>
                         <img 
-                          src={sticker.thumbnailUrl || `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png')).replace(/#/g, '%23')}`} 
+                          src={sticker.thumbnailUrl || getStickerThumbnailUrl(sticker.fileName)} 
                           alt={sticker.name}
                           className="absolute top-1/2 left-1/2 max-w-none"
                           style={{ 

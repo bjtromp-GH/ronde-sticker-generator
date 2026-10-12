@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
 import { Sticker } from '../types';
 import { generatePdfThumbnail, cleanStickerName } from '../utils/pdfThumbnail';
+import { getStickerThumbnailUrl } from '../utils/urlHelper';
 
 interface LibraryProps {
   onAddSticker: (sticker: Sticker) => void;
@@ -474,11 +475,7 @@ export default function Library({
                       >
                         {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
                           <img
-                            src={
-                              sticker.thumbnailUrl ||
-                              `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png'))
-                                .replace(/#/g, '%23')}`
-                            }
+                            src={sticker.thumbnailUrl || getStickerThumbnailUrl(sticker.fileName)}
                             alt={sticker.name}
                             className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
                             style={{ transform: 'translate(-50%, -50%)' }}
@@ -555,11 +552,7 @@ export default function Library({
                       >
                         {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
                           <img
-                            src={
-                              sticker.thumbnailUrl ||
-                              `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png'))
-                                .replace(/#/g, '%23')}`
-                            }
+                            src={sticker.thumbnailUrl || getStickerThumbnailUrl(sticker.fileName)}
                             alt={sticker.name}
                             className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
                             style={{ transform: 'translate(-50%, -50%)' }}
