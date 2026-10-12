@@ -23,6 +23,14 @@ export default function Library({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'all' | 'default' | 'custom'>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => {
+    return (localStorage.getItem('sticker_view_mode') as 'grid' | 'list') || 'grid';
+  });
+
+  const handleToggleViewMode = (mode: 'grid' | 'list') => {
+    setViewMode(mode);
+    localStorage.setItem('sticker_view_mode', mode);
+  };
 
   // Drag and drop state
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -319,41 +327,71 @@ export default function Library({
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-2 mb-4">
-        <button
-          onClick={() => setActiveTab('all')}
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-            activeTab === 'all'
-              ? 'bg-indigo-600 text-white shadow-xs'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
-        >
-          Alle ({allStickers.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('default')}
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-            activeTab === 'default'
-              ? 'bg-indigo-600 text-white shadow-xs'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
-        >
-          Standaard ({defaultStickers.length})
-        </button>
-        <button
-          onClick={() => setActiveTab('custom')}
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-            activeTab === 'custom'
-              ? 'bg-indigo-600 text-white shadow-xs'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
-        >
-          <span>Eigen ({customStickers.length})</span>
-          {customStickers.length > 0 && (
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-          )}
-        </button>
+      {/* Tabs & View Mode Switcher */}
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'all'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            Alle ({allStickers.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('default')}
+            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'default'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            Standaard ({defaultStickers.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('custom')}
+            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+              activeTab === 'custom'
+                ? 'bg-indigo-600 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            <span>Eigen ({customStickers.length})</span>
+            {customStickers.length > 0 && (
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+            )}
+          </button>
+        </div>
+
+        {/* View Mode Switcher (Grid vs List) */}
+        <div className="flex items-center p-0.5 bg-slate-100 rounded-lg border border-slate-200 shrink-0">
+          <button
+            type="button"
+            onClick={() => handleToggleViewMode('grid')}
+            title="Thumbnail- / Rasterweergave"
+            className={`p-1.5 rounded-md transition-all ${
+              viewMode === 'grid'
+                ? 'bg-white text-indigo-600 shadow-xs'
+                : 'text-slate-400 hover:text-slate-600'
+            }`}
+          >
+            <Icons.LayoutGrid className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleToggleViewMode('list')}
+            title="Lijstweergave"
+            className={`p-1.5 rounded-md transition-all ${
+              viewMode === 'list'
+                ? 'bg-white text-indigo-600 shadow-xs'
+                : 'text-slate-400 hover:text-slate-600'
+            }`}
+          >
+            <Icons.List className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Upload Drag & Drop area */}
@@ -417,86 +455,170 @@ export default function Library({
           </div>
         ) : (
           <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
-              {filteredStickers.map((sticker) => (
-                <div key={sticker.id} className="relative group">
-                  <button
-                    id={`sticker-btn-${sticker.id}`}
-                    onClick={() => onAddSticker(sticker)}
-                    className="w-full relative flex flex-col items-center text-center p-3 bg-slate-50 hover:bg-indigo-50/50 rounded-xl border border-slate-100 hover:border-indigo-100 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-                  >
-                    {/* Circle preview */}
-                    <div
-                      className="w-16 h-16 rounded-full flex items-center justify-center shadow-xs relative shrink-0 transition-transform group-hover:scale-105 group-hover:shadow-md overflow-hidden mb-2.5"
-                      style={{
-                        backgroundColor: '#ffffff',
-                        border: sticker.isCustom ? `2px solid ${sticker.color}` : '1px solid #e2e8f0',
-                      }}
+            {viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+                {filteredStickers.map((sticker) => (
+                  <div key={sticker.id} className="relative group">
+                    <button
+                      id={`sticker-btn-${sticker.id}`}
+                      onClick={() => onAddSticker(sticker)}
+                      className="w-full relative flex flex-col items-center text-center p-3 bg-slate-50 hover:bg-indigo-50/50 rounded-xl border border-slate-100 hover:border-indigo-100 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                     >
-                      {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
-                        <img
-                          src={
-                            sticker.thumbnailUrl ||
-                            `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png'))
-                              .replace(/#/g, '%23')}`
-                          }
-                          alt={sticker.name}
-                          className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
-                          style={{ transform: 'translate(-50%, -50%)' }}
-                        />
-                      ) : (
-                        <>
-                          <div
-                            className="absolute inset-1 rounded-full border border-dashed border-white/50"
-                            style={{ backgroundColor: sticker.color }}
-                          ></div>
-                          <div className="relative z-10 flex items-center justify-center">
-                            <Icons.FileText className="w-5 h-5 text-white" />
-                          </div>
-                        </>
-                      )}
+                      {/* Circle preview */}
+                      <div
+                        className="w-16 h-16 rounded-full flex items-center justify-center shadow-xs relative shrink-0 transition-transform group-hover:scale-105 group-hover:shadow-md overflow-hidden mb-2.5"
+                        style={{
+                          backgroundColor: '#ffffff',
+                          border: sticker.isCustom ? `2px solid ${sticker.color}` : '1px solid #e2e8f0',
+                        }}
+                      >
+                        {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
+                          <img
+                            src={
+                              sticker.thumbnailUrl ||
+                              `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png'))
+                                .replace(/#/g, '%23')}`
+                            }
+                            alt={sticker.name}
+                            className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
+                            style={{ transform: 'translate(-50%, -50%)' }}
+                          />
+                        ) : (
+                          <>
+                            <div
+                              className="absolute inset-1 rounded-full border border-dashed border-white/50"
+                              style={{ backgroundColor: sticker.color }}
+                            ></div>
+                            <div className="relative z-10 flex items-center justify-center">
+                              <Icons.FileText className="w-5 h-5 text-white" />
+                            </div>
+                          </>
+                        )}
 
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-indigo-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
-                        <Icons.Plus className="w-6 h-6 text-white drop-shadow-md" />
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-indigo-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20">
+                          <Icons.Plus className="w-6 h-6 text-white drop-shadow-md" />
+                        </div>
+                      </div>
+
+                      <div className="w-full px-1">
+                        <h3 className="font-semibold text-xs leading-tight text-slate-700 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                          {sticker.name}
+                        </h3>
+                        {sticker.isCustom && (
+                          <span className="inline-block mt-1 text-[9px] font-bold text-indigo-500 bg-indigo-50 px-1.5 py-0.5 rounded">
+                            Eigen sticker
+                          </span>
+                        )}
+                      </div>
+                    </button>
+
+                    {/* Delete button for custom stickers */}
+                    {sticker.isCustom && onDeleteCustomSticker && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (
+                            window.confirm(
+                              `Weet je zeker dat je sticker "${sticker.name}" wilt verwijderen uit je bibliotheek?`
+                            )
+                          ) {
+                            onDeleteCustomSticker(sticker.id);
+                          }
+                        }}
+                        title="Verwijder deze eigen sticker"
+                        className="absolute top-1.5 right-1.5 z-30 p-1 bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-full shadow-xs border border-slate-200 transition-all opacity-0 group-hover:opacity-100"
+                      >
+                        <Icons.Trash2 className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                {filteredStickers.map((sticker) => (
+                  <div
+                    key={sticker.id}
+                    id={`sticker-row-${sticker.id}`}
+                    onClick={() => onAddSticker(sticker)}
+                    className="group relative flex items-center justify-between p-2.5 bg-slate-50 hover:bg-indigo-50/60 rounded-xl border border-slate-100 hover:border-indigo-100 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      {/* Round thumbnail preview */}
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center shadow-xs relative shrink-0 overflow-hidden bg-white"
+                        style={{
+                          border: sticker.isCustom ? `2px solid ${sticker.color}` : '1px solid #e2e8f0',
+                        }}
+                      >
+                        {sticker.thumbnailUrl || (!sticker.isCustom && sticker.fileName) ? (
+                          <img
+                            src={
+                              sticker.thumbnailUrl ||
+                              `/thumbnails/${encodeURI(sticker.fileName.replace('.pdf', '.png'))
+                                .replace(/#/g, '%23')}`
+                            }
+                            alt={sticker.name}
+                            className="w-[120%] h-[120%] max-w-none object-cover absolute top-1/2 left-1/2"
+                            style={{ transform: 'translate(-50%, -50%)' }}
+                          />
+                        ) : (
+                          <div className="relative z-10 flex items-center justify-center">
+                            <Icons.FileText className="w-4 h-4 text-slate-400" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Text info */}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-xs text-slate-800 truncate group-hover:text-indigo-600 transition-colors">
+                            {sticker.name}
+                          </h3>
+                          {sticker.isCustom && (
+                            <span className="text-[9px] font-bold text-indigo-500 bg-indigo-50 px-1 py-0.2 rounded shrink-0">
+                              Eigen
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-slate-400 truncate mt-0.5">
+                          {sticker.text || sticker.fileName}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="w-full px-1">
-                      <h3 className="font-semibold text-xs leading-tight text-slate-700 line-clamp-2 group-hover:text-indigo-600 transition-colors">
-                        {sticker.name}
-                      </h3>
-                      {sticker.isCustom && (
-                        <span className="inline-block mt-1 text-[9px] font-bold text-indigo-500 bg-indigo-50 px-1.5 py-0.5 rounded">
-                          Eigen sticker
-                        </span>
+                    {/* Action buttons */}
+                    <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                      {sticker.isCustom && onDeleteCustomSticker && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (
+                              window.confirm(
+                                `Weet je zeker dat je sticker "${sticker.name}" wilt verwijderen uit je bibliotheek?`
+                              )
+                            ) {
+                              onDeleteCustomSticker(sticker.id);
+                            }
+                          }}
+                          title="Verwijder deze eigen sticker"
+                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                        >
+                          <Icons.Trash2 className="w-3.5 h-3.5" />
+                        </button>
                       )}
-                    </div>
-                  </button>
 
-                  {/* Delete button for custom stickers */}
-                  {sticker.isCustom && onDeleteCustomSticker && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (
-                          window.confirm(
-                            `Weet je zeker dat je sticker "${sticker.name}" wilt verwijderen uit je bibliotheek?`
-                          )
-                        ) {
-                          onDeleteCustomSticker(sticker.id);
-                        }
-                      }}
-                      title="Verwijder deze eigen sticker"
-                      className="absolute top-1.5 right-1.5 z-30 p-1 bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-full shadow-xs border border-slate-200 transition-all opacity-0 group-hover:opacity-100"
-                    >
-                      <Icons.Trash2 className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
+                      <div className="w-7 h-7 rounded-lg bg-white border border-slate-200 group-hover:bg-indigo-600 group-hover:border-indigo-600 flex items-center justify-center text-slate-400 group-hover:text-white transition-all shadow-2xs">
+                        <Icons.Plus className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {filteredStickers.length === 0 && (
               <div className="text-center py-8 text-slate-400 text-xs">
